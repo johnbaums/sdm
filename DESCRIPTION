@@ -1,0 +1,21 @@
+Package: sdm
+Type: Package
+Title: Code for fitting and projecting SDMs
+Version: 0.0.1.9000
+Description: This package facilitates Maxent model fitting, evaluation and 
+    projection.
+Authors@R: as.person("John Baumgartner <johnbaums@gmail.com> [aut, cre]")
+Depends: R (>= 3.5.0)
+Imports: 
+  rgbif,
+  dplyr,
+  ALA4R,
+  sf,
+  fasterize,
+  raster
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.1
