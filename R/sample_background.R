@@ -28,8 +28,14 @@
 #'   contained by an IBRA region, IBRA subregion or Koppen-Geiger zone in order
 #'   for background to be sampled from that region/subregion/zone. See also
 #'   explanation of `poly_type`, above.
+#' @param return_poly Logical. Should the polygon defining the background area
+#'   be returned? Default is `FALSE`.
 #' @param quiet Logical. Should messages be suppressed?
-#' @return An `sfc` object containing sampled background points.
+#' @return If `return_poly` is `TRUE`, a list with two elements: `"bg"`, an `sfc`
+#'   object containing sampled background points, and `"bg_poly"`, an `sfc` 
+#'   polygon object defining the area within which background points were 
+#'   sampled. If `return_poly` is `FALSE` (the default), only the `sfc` object 
+#'   containing sampled background points is returned.
 #' @importFrom raster raster alignExtent extent crop xyFromCell cellFromXY Which
 #' @importFrom fasterize fasterize
 #' @importFrom sf st_union st_buffer st_transform st_crs st_crop st_contains 
@@ -40,7 +46,7 @@
 sample_background <- function(n, occurrence, template_raster, 
                               target_background=NULL, buffer_width=NULL, 
                               poly_type=NULL, adjacent_poly=FALSE, 
-                              quiet=FALSE) {
+                              return_poly=FALSE, quiet=FALSE) {
   if(is(occurrence, 'SpatialPoints')) occurrence <- sf::st_as_sf(occurrence)
   if(!is(occurrence, 'sf') & !is(occurrence, 'sfc')) {
     stop('occurrence must be an sf, sfc or SpatialPoints* object.')
@@ -140,5 +146,12 @@ sample_background <- function(n, occurrence, template_raster,
     }
   }
   
-  sf::st_set_crs(sf::st_sfc(sf::st_multipoint(bg_xy)), sf::st_crs(r))
+  out <- sf::st_set_crs(sf::st_sfc(sf::st_multipoint(bg_xy)), sf::st_crs(r))
+  
+  if(isTRUE(return_poly)) {
+    list(bg=out, bg_poly=bg_poly)  
+  } else {
+    out
+  }
+  
 }
