@@ -47,20 +47,10 @@ clean_occ <- function(x, min_year=1950, missing_year=TRUE,
     flag$missing_year <- is.na(x$year)
   }
   if(isTRUE(georef)) {
-    if(is(x, 'occ_gbif')) {
-      flag$georef <- is.na(x$decimalLongitude) | is.na(x$decimalLatitude)
-    } else {
-      # assume xy are in columns named longitude and latitude if not gbif occ
-      flag$georef <- is.na(x$longitude) | is.na(x$latitude)
-    }
+    flag$georef <- is.na(x[['X']]) | is.na(x[['Y']])
   }
   if(isTRUE(zero_coord)) {
-    if(is(x, 'occ_gbif')) {
-      flag$zero_coord <- x$decimalLongitude == 0 | x$decimalLatitude == 0
-    } else {
-      # assume xy are in columns named longitude and latitude if not gbif occ
-      flag$zero_coord <- x$longitude == 0 | x$latitude == 0
-    }
+    flag$zero_coord <- x[['X']] == 0 | x[['Y']] == 0
     flag$zero_coord <- !is.na(flag$zero_coord) & flag$zero_coord
   }
   if(!is.null(max_coord_uncert)) {
