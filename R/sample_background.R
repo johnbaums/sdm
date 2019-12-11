@@ -47,7 +47,7 @@ sample_background <- function(n, occ, template_raster, target_background=NULL,
   }
   if(is.character(template_raster)) {
     template_raster <- raster::raster(template_raster)  
-  } else if(!is(template_raster, 'raster')) {
+  } else if(!is(template_raster, 'Raster')) {
     stop('template_raster must be a Raster* object or file path to a raster.')
   }
   if(is.null(poly_type) && is.null(buffer_width)) {
