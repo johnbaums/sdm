@@ -81,7 +81,7 @@ points(sf::as_Spatial(bg), pch='.')
 points(sf::as_Spatial(occ_clean), pch=20, cex=0.5, col='red')
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](README_files/figure-gfm/occ_and_bg_map-1.png)<!-- -->
 
 ### Fit model
 
@@ -119,10 +119,10 @@ pred <- rmaxent::project(m$model_full, bio_moll)
 plot(pred$prediction_logistic, zlim=c(0, 1))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](README_files/figure-gfm/projection_map-1.png)<!-- -->
 
 ``` r
 plot(pred$prediction_cloglog, zlim=c(0, 1))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](README_files/figure-gfm/projection_map-2.png)<!-- -->
