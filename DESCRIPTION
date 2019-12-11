@@ -12,7 +12,9 @@ Imports:
   ALA4R,
   sf,
   fasterize,
-  raster
+  raster,
+  dismo,
+  data.table
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
