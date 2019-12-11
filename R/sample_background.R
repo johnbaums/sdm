@@ -5,10 +5,10 @@
 #' @param n Integer. The number of points to sample. If fewer points are
 #'   available given the specified constraints, as many as possible will be
 #'   returned.
-#' @param occ An `sf` or `sfc` object containing occurrence data. These are used
-#'   to define the polygons (e.g. IBRA) within which to sample (if `poly_type`
-#'   is not `NULL`) and/or are used to determine a buffered area within which to
-#'   sample.
+#' @param occurrence An `sf`, `sfc`, or `SpatialPoints*` object containing
+#'   occurrence data. These are used to define the polygons (e.g. IBRA) within
+#'   which to sample (if `poly_type` is not `NULL`) and/or are used to determine
+#'   a buffered area within which to sample.
 #' @param template_raster A `Raster*` object that defines the cell arrangement.
 #'   Cells that have `NA` value in this raster will not be included in the
 #'   background sample. If `template_raster` has multiple layers, background
@@ -17,13 +17,13 @@
 #'   to be used as background. This would typically be a "target species
 #'   background" sample. If `NULL` a random sample of `n` cells within the area
 #'   defined by `buffer_width`.
-#' @param buffer_width Numeric. The proximity to `occ` points within which
-#'   background will be sampled.
+#' @param buffer_width Numeric. The proximity to `occurrence` points within
+#'   which background will be sampled.
 #' @param poly_type Character. One of: `NULL` (default); `ibra_region`;
 #'   `ibra_subregion`; or `koppen`. If a polygon type is specified, background
 #'   will only be sampled from within polygons that belong to an IBRA region,
 #'   IBRA subregion, or Koppen-Geiger zone that contains at least `min_contain`
-#'   of the `occ` points.
+#'   of the `occurrence` points.
 #' @param min_contain Integer. The minimum number of points that must be
 #'   contained by an IBRA region, IBRA subregion or Koppen-Geiger zone in order
 #'   for background to be sampled from that region/subregion/zone. See also
@@ -34,15 +34,21 @@
 #' @importFrom fasterize fasterize
 #' @importFrom sf st_union st_buffer st_transform st_crs st_crop st_contains 
 #'   st_intersection st_union st_bbox st_as_sf as_Spatial st_set_crs st_sfc 
-#'   st_multipoint
+#'   st_multipoint st_geometry
 #' @export
 #'
-sample_background <- function(n, occ, template_raster, target_background=NULL, 
-                              buffer_width=NULL, poly_type=NULL, 
-                              adjacent_poly=FALSE, quiet=FALSE) {
-  # if target_background not provided, background will be a random sample
-  if(!is(occ, 'sf') & !is(occ, 'sfc')) stop('occ must be an sf or sfc object.')
-  if(isTRUE(adjacent_poly)) warning('adjacent_poly ignored (not yet implemented)')
+sample_background <- function(n, occurrence, template_raster, 
+                              target_background=NULL, buffer_width=NULL, 
+                              poly_type=NULL, adjacent_poly=FALSE, 
+                              quiet=FALSE) {
+  if(is(occurrence, 'SpatialPoints')) occurrence <- sf::st_as_sf(occurrence)
+  if(!is(occurrence, 'sf') & !is(occurrence, 'sfc')) {
+    stop('occurrence must be an sf, sfc or SpatialPoints* object.')
+  }
+  occurrence <- sf::st_geometry(occurrence)
+  if(isTRUE(adjacent_poly)) {
+    warning('adjacent_poly ignored (not yet implemented)')
+  }
   if(!is.null(target_background) && 
      (!is(target_background, 'sf') & !is(target_background, 'sfc'))) {
     stop('target_background must be an sf or sfc object.')
@@ -57,7 +63,7 @@ sample_background <- function(n, occ, template_raster, target_background=NULL,
   }
   
   if(!is.null(buffer_width)) {
-    bg_poly <- sf::st_union(sf::st_buffer(occ, dist=buffer_width))
+    bg_poly <- sf::st_union(sf::st_buffer(occurrence, dist=buffer_width))
   }
   
   if(!is.null(poly_type)) {
@@ -73,13 +79,13 @@ sample_background <- function(n, occ, template_raster, target_background=NULL,
       },
       koppen={
         p <- sdm:::koppen
-        occ_ <- sf::st_transform(occ, sf::st_crs(p))
-        #p <- sf::st_transform(sdm:::koppen, sf::st_crs(occ))
-        p_crop <- sf::st_crop(koppen, occ_)
-        contains <- sf::st_contains(p_crop, occ_)
+        occurrence_ <- sf::st_transform(occurrence, sf::st_crs(p))
+        #p <- sf::st_transform(sdm:::koppen, sf::st_crs(occurrence))
+        p_crop <- sf::st_crop(koppen, occurrence_)
+        contains <- sf::st_contains(p_crop, occurrence_)
         p_contains <- 
           p[p$layer %in% unique(p_crop$layer[lengths(contains) > 0]), ]
-        sf::st_transform(p_contains, sf::st_crs(occ))
+        sf::st_transform(p_contains, sf::st_crs(occurrence))
       }
     )
     bg_poly <- sf::st_intersection(poly, bg_poly)
