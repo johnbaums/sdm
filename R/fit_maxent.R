@@ -39,7 +39,7 @@
 #' @return If `return_model=FALSE`, then `NULL` is returned invisibly. 
 #'   Otherwise, a list is returned containing the replicated model (element 
 #'   `'model_rep'`, if `replicates` > 1), the full model (element
-#'    `'model_full'`), the SWD dataset (element `'swd`) and a 
+#'    `'model_full'`), the SWD dataset (element `'swd'`) and a 
 #'    presence-background indicator vector (element `'pa'`), which shows, for 
 #'    each row of the SWD, whether that row corresponds to a presence location 
 #'    (`1`) or a background location (`0`).
