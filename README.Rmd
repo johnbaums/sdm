@@ -44,13 +44,11 @@ occ_clean <- clean_occ(occ)
 ### Load predictors
 
 ```{r}
-# Load some enviro rasters
 bio <- raster::getData('worldclim', var='bio', res=10)
 e <- raster::extent(112, 154, -44, -9)
+# crop and project
 bio_moll <- raster::projectRaster(
-  raster::crop(
-    raster::stack(list.files('wc10', '\\.bil$', full=TRUE)), 
-    e, snap='out'),
+  raster::crop(bio, e, snap='out'),
   crs=raster::crs(occ_clean),
   res=15000
 )
@@ -63,7 +61,7 @@ bio_moll <- raster::projectRaster(
 
 ```{r}
 bg <- sample_background(n=10000, occ=occ_clean, template_raster=bio_moll, 
-                        buffer_width=300000)
+                        buffer_width=300000, return_poly=TRUE)
 ```
 
 ```{r, occ_and_bg_map}
