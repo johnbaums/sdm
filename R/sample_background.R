@@ -2,31 +2,32 @@
 #'
 #' Create a background sample using target species or random strategy.
 #'
-#' @param n Integer. The number of points to sample. If fewer points are available given
-#'   the specified constraints, as many as possible will be returned.
-#' @param occ An \code{sf} or \code{sfc} object containing occurrence data. 
-#'   These are used to define the polygons (e.g. IBRA) within which to sample (if 
-#'   \code{poly_type} is not \code{NULL}) and/or are used to determine a 
-#'   buffered area within which to sample.
-#' @param template_raster A \code{Raster*} object that defines the cell 
-#'   arrangement. Cells that have \code{NA} value in this raster will not be 
-#'   included in the background sample.
-#' @param target_background An \code{sf} or \code{sfc} object containing 
-#'   candidate points to be used as background. This would typically be a 
-#'   "target species background" sample. If \code{NULL} a random sample of 
-#'   \code{n} cells within the area defined by \code{buffer_width}.
-#' @param buffer_width Numeric. The proximity to \code{occ} points within which 
+#' @param n Integer. The number of points to sample. If fewer points are
+#'   available given the specified constraints, as many as possible will be
+#'   returned.
+#' @param occ An `sf` or `sfc` object containing occurrence data. These are used
+#'   to define the polygons (e.g. IBRA) within which to sample (if `poly_type`
+#'   is not `NULL`) and/or are used to determine a buffered area within which to
+#'   sample.
+#' @param template_raster A `Raster*` object that defines the cell arrangement.
+#'   Cells that have `NA` value in this raster will not be included in the
+#'   background sample.
+#' @param target_background An `sf` or `sfc` object containing candidate points
+#'   to be used as background. This would typically be a "target species
+#'   background" sample. If `NULL` a random sample of `n` cells within the area
+#'   defined by `buffer_width`.
+#' @param buffer_width Numeric. The proximity to `occ` points within which
 #'   background will be sampled.
-#' @param poly_type Character. One of: \code{NULL} (default); \code{ibra_region}; 
-#'   \code{ibra_subregion}; or \code{koppen}. If a polygon type is specified,
-#'   background will only be sampled from within polygons that belong to an 
-#'   IBRA region, IBRA subregion, or Koppen-Geiger zone that contains at least
-#'   \code{min_contain} of the \code{occ} points.
-#' @param min_contain Integer. The minimum number of points that must be 
+#' @param poly_type Character. One of: `NULL` (default); `ibra_region`;
+#'   `ibra_subregion`; or `koppen`. If a polygon type is specified, background
+#'   will only be sampled from within polygons that belong to an IBRA region,
+#'   IBRA subregion, or Koppen-Geiger zone that contains at least `min_contain`
+#'   of the `occ` points.
+#' @param min_contain Integer. The minimum number of points that must be
 #'   contained by an IBRA region, IBRA subregion or Koppen-Geiger zone in order
-#'   for background to be sampled from that region/subregion/zone. See also 
-#'   explanation of \code{poly_type}, above.
-#' @return An \code{sfc} object containing sampled background points.
+#'   for background to be sampled from that region/subregion/zone. See also
+#'   explanation of `poly_type`, above.
+#' @return An `sfc` object containing sampled background points.
 #' @importFrom raster raster alignExtent extent crop xyFromCell cellFromXY Which
 #' @importFrom fasterize fasterize
 #' @importFrom sf st_union st_buffer st_transform st_crs st_crop st_contains 

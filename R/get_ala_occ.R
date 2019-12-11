@@ -3,19 +3,19 @@
 #' Get occurrence data for a species from the Atlas of Living Australia.
 #'
 #' @param x Character. A taxon name.
-#' @param target_crs One of: a \code{crs} object, an EPSG code passed as a 
-#'   number (e.g. \code{target_crs=4236} for WGS84), or a character string 
-#'   describing a projection as accepted by OGR (such as a PROJ4 string, e.g.
-#'   \code{target_crs='+init=epsg:4326'})
-#' @param return_meta Logical. If \code{TRUE}, return a list with occurrence 
-#'   data as well as associated metadata. If \code{FALSE} (default), only return 
-#'   occurrence data.
+#' @param target_crs One of: a `crs` object, an EPSG code passed as a number
+#'   (e.g. `target_crs=4236` for WGS84), or a character string describing a
+#'   projection as accepted by OGR (such as a PROJ4 string, e.g.
+#'   `target_crs='+init=epsg:4326'`)
+#' @param return_meta Logical. If `TRUE`, return a list with occurrence data as
+#'   well as associated metadata. If `FALSE` (default), only return occurrence
+#'   data.
 #' @param quiet Logical. Suppress messages?
-#' @param ... Additional arguments passed to \code{\link[ALA4R]{occurrences}}.
-#' @return If \code{return_meta} is \code{TRUE}, a list with two elements: 
-#'   \code{data} (the occurrence data, as an \code{sf} object, and \code{meta} 
-#'   (associated metadata, a \code{tbl_df}). If \code{return_meta} is 
-#'   \code{FALSE}, only the \code{data} element is returned.
+#' @param ... Additional arguments passed to [ALA4R::occurrences()].
+#' @return If `return_meta` is `TRUE`, a list with two elements: `data` (the
+#'   occurrence data, as an `sf` object, and `meta` (associated metadata, a
+#'   `tbl_df`). If `return_meta` is `FALSE`, only the `data` element is
+#'   returned.
 #' @details The underlying web service returns a maximum of 500,000 records. If
 #'   a greater number of records are available for the requested taxon, the 
 #'   first 500,000 will be returned. Only records that have coordinates, and 

@@ -2,34 +2,32 @@
 #'
 #' Clean occurrence data sourced via get_ala_occ or get_gbif_occ.
 #'
-#' @param x An \code{sf} object as returned by \code{\link{get_ala_occ}} or
-#'   \code{\link{get_gbif_occ}}.
-#' @param min_year Integer. The earliest year for which to retain occurrence records.
-#'   Default value is 1950.
-#' @param missing_year Logical. If \code{TRUE}, remove records with missing 
-#'   year of collection.
-#' @param georef Logical. If \code{TRUE}, remove records with missing longitude 
-#'   or latitude.
-#' @param georef Logical. If \code{TRUE}, remove records with either longitude 
+#' @param x An `sf` object as returned by [get_ala_occ()] or [get_gbif_occ()].
+#' @param min_year Integer. The earliest year for which to retain occurrence
+#'   records. Default value is `1950`.
+#' @param missing_year Logical. If `TRUE`, remove records with missing year of
+#'   collection.
+#' @param georef Logical. If `TRUE`, remove records with missing longitude or
+#'   latitude.
+#' @param georef Logical. If `TRUE`, remove records with either longitude
 #'   latitude equal to 0.
-#' @param max_coord_uncert Numeric. The maximum tolerable coordinate 
-#'   uncertainty (in metres). Records with uncertainty greater than this will be 
-#'   removed.
-#' @param missing_coord_uncert. Logical. If \code{TRUE}, remove records with 
-#'   missing coordinate uncertainty.
-#' @param filter A list of regular expressions. List elements should have names 
-#'   that match column names of \code{x}, and the corresponding elements should
-#'   specify regex patterns that will be matched in those columns. Matching 
-#'   records will be omitted. For example, to remove records whose "locality" 
-#'   column contains the whole word "zoo", use 
-#'   \code{filter=list(locality='\\\\bzoo\\\\b')}, where \code{\\\\b} indicates 
-#'   a word boundary. To match an entire string, use \code{^}to indicate the 
-#'   start of the string and \code{$} to indicate the end, e.g. 
-#'   \code{filter=list(occCultivatedEscapee='^TRUE$')}.
-#' @param flag_only Logical. If \code{TRUE}, add a column to \code{x} that 
-#'   shows which issues a record has, if any. If \code{FALSE}, return a cleaned
-#'   subset of \code{x} (i.e. with flagged records removed).
-#' @return A cleaned \code{sf} object.
+#' @param max_coord_uncert Numeric. The maximum tolerable coordinate uncertainty
+#'   (in metres). Records with uncertainty greater than this will be removed.
+#' @param missing_coord_uncert. Logical. If `TRUE`, remove records with missing
+#'   coordinate uncertainty.
+#' @param filter A list of regular expressions. List elements should have names
+#'   that match column names of `x`, and the corresponding elements should
+#'   specify regex patterns that will be matched in those columns. Matching
+#'   records will be omitted. For example, to remove records whose "locality"
+#'   column contains the whole word "zoo", use
+#'   `filter=list(locality='\\\\bzoo\\\\b')`, where `\\\\b` indicates a word
+#'   boundary. To match an entire string, use `^` to indicate the start of the
+#'   string and `$` to indicate the end, e.g.
+#'   `filter=list(occCultivatedEscapee='^TRUE$')`.
+#' @param flag_only Logical. If `TRUE`, add a column to `x` that shows which
+#'   issues a record has, if any. If `FALSE`, return a cleaned subset of `x`
+#'   (i.e. with flagged records removed).
+#' @return A cleaned `sf` object.
 #' @export
 #'
 clean_occ <- function(x, min_year=1950, missing_year=TRUE, 

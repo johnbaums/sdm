@@ -4,12 +4,12 @@
 #' Facility.
 #'
 #' @param x Character. A taxon name.
-#' @param target_crs One of: a \code{crs} object, an EPSG code passed as a 
-#'   number (e.g. \code{target_crs=4236} for WGS84), or a character string 
-#'   describing a projection as accepted by OGR (such as a PROJ4 string, e.g.
-#'   \code{target_crs='+init=epsg:4326'}).
-#' @param ... Additional arguments passed to \code{\link[rgbif]{occ_search}}.
-#' @return An \code{sf} object containing occurrence data.
+#' @param target_crs One of: a `crs` object, an EPSG code passed as a number
+#'   (e.g. `target_crs=4236` for WGS84), or a character string describing a
+#'   projection as accepted by OGR (such as a PROJ4 string, e.g.
+#'   `target_crs='+init=epsg:4326'`).
+#' @param ... Additional arguments passed to [rgbif::occ_search()].
+#' @return An `sf` object containing occurrence data.
 #' @details The underlying web service returns a maximum of 200,000 records. If
 #'   a greater number of records are available for the requested taxon, the 
 #'   first 200,000 will be returned. Only records that have coordinates, and 
