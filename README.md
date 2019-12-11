@@ -116,13 +116,13 @@ pred <- rmaxent::project(m$model_full, bio_moll)
     Calculating contribution of feature 10 of 10
 
 ``` r
-plot(pred$prediction_logistic)
+plot(pred$prediction_logistic, zlim=c(0, 1))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
-plot(pred$prediction_cloglog)
+plot(pred$prediction_cloglog, zlim=c(0, 1))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->

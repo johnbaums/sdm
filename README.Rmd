@@ -90,7 +90,7 @@ m <- fit_maxent(occurrence=occ_clean, background=bg,
 
 ```{r}
 pred <- rmaxent::project(m$model_full, bio_moll)
-plot(pred$prediction_logistic)
-plot(pred$prediction_cloglog)
+plot(pred$prediction_logistic, zlim=c(0, 1))
+plot(pred$prediction_cloglog, zlim=c(0, 1))
 ```
 
