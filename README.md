@@ -65,7 +65,7 @@ bio_moll <- raster::projectRaster(
 
 ### Generate background data
 
-10,000 random points within 500km of occurrences
+10,000 random points within 300km of occurrences
 
 ``` r
 bg <- sample_background(n=10000, occ=occ_clean, template_raster=bio_moll, 
