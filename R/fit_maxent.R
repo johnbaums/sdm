@@ -25,6 +25,10 @@
 #'   specify an alternative mode of replication, pass the appropriate argument
 #'   to `rep_args`, e.g. `rep_args=c(replicatetype='bootstrap')`.
 #' @param curves Logical. Should response curves be included in the html output?
+#' @param outputformat One of `'logistic'`, `'cloglog'`, or `'raw'`. This
+#'   defines the scale of response curves and values shown in the html threshold
+#'   table, as well as in the output .csv results. Default is `'cloglog'` if
+#'   Maxent version 3.4.x is available, and `'logistic'` otherwise.
 #' @param rep_args A named character vector of Maxent arguments to pass to 
 #'   [dismo::maxent()] when fitting replicate models. See [maxent_args] for 
 #'   some possible options (as at Maxent 3.4.0). E.g. 
@@ -53,8 +57,16 @@
 #'
 fit_maxent <- function(occurrence, background, predictors, outdir, 
                        features, beta=1, replicates=1, 
-                       curves=TRUE, rep_args, full_args, quiet=FALSE, 
-                       return_model=FALSE, save_model=TRUE, ...) {
+                       curves=TRUE, outputformat=c('cloglog', 'logistic', 'raw'), 
+                       rep_args, full_args, quiet=FALSE, return_model=FALSE, 
+                       save_model=TRUE, ...) {
+  v <- maxent_version()
+  outputformat <- match.arg(outputformat)
+  if(v < '3.4.0' & outputformat=='cloglog') {
+    outputformat <- 'logistic'
+    warning('outputformat=cloglog is unsupported by Maxent ', v, 
+            '. Using logistic instead.')
+  }
   if(replicates==0) replicates <- 1
   if(is(occurrence, 'SpatialPoints')) occurrence <- sf::st_as_sf(occurrence)
   if(is(background, 'SpatialPoints')) background <- sf::st_as_sf(background)
@@ -122,7 +134,7 @@ fit_maxent <- function(occurrence, background, predictors, outdir,
   off <- unname(off)
   
   reserved <- c('replicates', 'responsecurves', 'betamultiplier', 'linear', 
-                'product', 'quadratic', 'threshold', 'hinge')
+                'product', 'quadratic', 'threshold', 'hinge', 'outputformat')
   
   if(replicates > 1) {
     if(missing(rep_args)) {
@@ -142,6 +154,7 @@ fit_maxent <- function(occurrence, background, predictors, outdir,
                       args=c(paste0('replicates=', replicates),
                              paste0('responsecurves=', curves),
                              paste0('betamultiplier=', beta),
+                             paste0('outputformat=', outputformat),
                              off, paste(names(rep_args), rep_args, sep='=')))
   }
   if(missing(full_args)) {
@@ -160,7 +173,8 @@ fit_maxent <- function(occurrence, background, predictors, outdir,
   model_full <- dismo::maxent(swd, pa, path=file.path(outdir, 'full'), 
                     args=c(off, paste(names(full_args), full_args, sep='='),
                            paste0('responsecurves=', curves),
-                           paste0('betamultiplier=', beta)))
+                           paste0('betamultiplier=', beta),
+                           paste0('outputformat=', outputformat)))
   
   # Save fitted model object, and the model-fitting data.
   if(replicates > 1) {
