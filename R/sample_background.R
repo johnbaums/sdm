@@ -1,6 +1,6 @@
 #' Create a background sample
 #'
-#' Create a background sample using target species or random strategy.
+#' Create a background sample using a target species or random strategy.
 #'
 #' @param n Integer. The number of points to sample. If fewer points are
 #'   available given the specified constraints, as many as possible will be
