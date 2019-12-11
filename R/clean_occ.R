@@ -55,12 +55,15 @@ clean_occ <- function(x, min_year=1950, missing_year=TRUE,
   }
   if(!is.null(max_coord_uncert)) {
     if(is(x, 'occ_gbif')) {
-      flag$max_coord_uncert <- x$coordinateUncertaintyInMeters > max_coord_uncert  
+      flag$max_coord_uncert <- 
+        x$coordinateUncertaintyInMeters > max_coord_uncert  
     } else {
       # if not occ_gbif, assume col is "coordinateUncertaintyInMetres"
-      flag$max_coord_uncert <- x$coordinateUncertaintyInMetres > max_coord_uncert  
+      flag$max_coord_uncert <- 
+        x$coordinateUncertaintyInMetres > max_coord_uncert  
     }
-    flag$max_coord_uncert <- !is.na(flag$max_coord_uncert) & flag$max_coord_uncert
+    flag$max_coord_uncert <- 
+      !is.na(flag$max_coord_uncert) & flag$max_coord_uncert
   }
   if(isTRUE(missing_coord_uncert)) {
     if(is(x, 'occ_gbif')) {
@@ -83,7 +86,8 @@ clean_occ <- function(x, min_year=1950, missing_year=TRUE,
       flag_filter <- mapply(function(nm, x) {
         ifelse(x, nm, '')
       }, names(flag_filter), flag_filter, SIMPLIFY=FALSE)
-      flag_filter <- gsub('^,+|,+$', '', do.call('paste', c(flag_filter, sep=','))) 
+      flag_filter <- gsub('^,+|,+$', '', 
+                          do.call('paste', c(flag_filter, sep=','))) 
     }
   }
   flag <- mapply(function(nm, x) {
