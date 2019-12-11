@@ -7,6 +7,8 @@
 #'   (e.g. `target_crs=4236` for WGS84), or a character string describing a
 #'   projection as accepted by OGR (such as a PROJ4 string, e.g.
 #'   `target_crs='+init=epsg:4326'`)
+#' @param include_children Logical. Should child taxa be included? Default is 
+#'   `FALSE`.
 #' @param return_meta Logical. If `TRUE`, return a list with occurrence data as
 #'   well as associated metadata. If `FALSE` (default), only return occurrence
 #'   data.
@@ -26,8 +28,8 @@
 #' @importFrom ALA4R search_names occurrences
 #' @export
 #'
-get_ala_occ <- function(x, target_crs = NULL, return_meta = FALSE, quiet=FALSE, 
-                        ...) {
+get_ala_occ <- function(x, target_crs = NULL, include_children=FALSE, 
+                        return_meta = FALSE, quiet=FALSE, ...) {
  
   taxon <- ALA4R::search_names(x)
   if(is.na(taxon$guid[1])) {
@@ -46,10 +48,12 @@ get_ala_occ <- function(x, target_crs = NULL, return_meta = FALSE, quiet=FALSE,
   args <- args[names(args) != 'record_count_only']
   
   # get record count
-  n <- do.call(ALA4R::occurrences, 
-               c(taxon=sprintf('taxon_concept_lsid:%s', 
-                               taxon$acceptedConceptGuid),
-                 record_count_only=TRUE, args))
+  n <- do.call(
+    ALA4R::occurrences, 
+    c(taxon=sprintf('%s:%s', 
+                    ifelse(include_children, 'lsid', 'taxon_concept_lsid'),
+                    taxon$acceptedConceptGuid),
+      record_count_only=TRUE, args))
   if(!quiet) message(n, ' records.')
   if(n > 500000) {
     warning(sprintf(
@@ -58,10 +62,12 @@ get_ala_occ <- function(x, target_crs = NULL, return_meta = FALSE, quiet=FALSE,
   }
   
   # get records
-  d <- do.call(ALA4R::occurrences, 
-               c(taxon=sprintf('taxon_concept_lsid:%s', 
-                               taxon$acceptedConceptGuid),
-                 args))
+  d <- do.call(
+    ALA4R::occurrences, 
+    c(taxon=sprintf('%s:%s', 
+                    ifelse(include_children, 'lsid', 'taxon_concept_lsid'),
+                    taxon$acceptedConceptGuid),
+      args))
   d <- lapply(d, dplyr::as.tbl)
   d$data <- sf::st_as_sf(d$data, coords=c('longitude', 'latitude'))
   d$data <- sf::st_set_crs(d$data, 4326)
