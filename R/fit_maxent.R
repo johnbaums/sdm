@@ -48,7 +48,7 @@
 #' @importFrom dismo maxent
 #' @importFrom raster stack ncell cellFromXY raster crs
 #' @importFrom sf st_coordinates st_as_sf st_drop_geometry
-#' @importFrom data.table data.table setkey
+#' @importFrom data.table data.table setkey :=
 #' @export
 #'
 fit_maxent <- function(occurrence, background, predictors, outdir, 
