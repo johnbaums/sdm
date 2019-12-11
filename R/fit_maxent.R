@@ -43,6 +43,8 @@
 #'    presence-background indicator vector (element `'pa'`), which shows, for 
 #'    each row of the SWD, whether that row corresponds to a presence location 
 #'    (`1`) or a background location (`0`).
+#' @section Warning. Note that if Maxent output already exists at `outdir`, it
+#'   may be overwritten.
 #' @importFrom dismo maxent
 #' @importFrom raster stack ncell cellFromXY raster crs
 #' @importFrom sf st_coordinates st_as_sf st_drop_geometry
